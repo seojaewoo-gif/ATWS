@@ -1,0 +1,25 @@
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            # 모델은 항상 이런 대답
+            {"role": "system", "content" : SYS_MSG},
+            # user(나)는 항상 이런 입력
+            {"role": "user", "content": _content_rule(prompt, base64_image, image_path)}
+            ],
+        tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "image_describer",
+            "description": "Reasoning what this picture is. Return fixed label and confidence",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "label": {"type": "string", "description":"identify label one of ['미상물체', '무인기', '쓰레기 풍선', '새']"},
+                    "confidence": {"type": "number", "description":"0~1 float"}
+                },
+                "required": ["label", "confidence"]
+            }
+        }
+    }
+],
